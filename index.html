@@ -2,189 +2,215 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>MediaFire – Download</title>
+<title>Download</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
 <style>
-* {
-    box-sizing: border-box;
-    font-family: Arial, Helvetica, sans-serif;
-}
+* { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; }
 
 body {
     margin: 0;
     background: #f2f4f7;
-    color: #333;
+    color: #222;
 }
 
-.header {
-    background: #ffffff;
-    padding: 15px;
-    border-bottom: 1px solid #ddd;
-    font-size: 22px;
-    font-weight: bold;
-    color: #0070f3;
-    text-align: center;
-}
-
-.container {
-    margin: 20px;
+/* TOPO */
+.topbar {
     background: #fff;
-    padding: 20px;
-    border-radius: 6px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
-
-.file-box {
     display: flex;
-    align-items: center;
-    gap: 15px;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-bottom: 1px solid #ddd;
 }
-
-.file-icon {
-    font-size: 48px;
-}
-
-.file-info h2 {
-    margin: 0;
-    font-size: 18px;
-}
-
-.file-info p {
-    margin: 4px 0;
-    font-size: 13px;
-    color: #666;
-}
-
-.download-btn {
-    margin-top: 25px;
-    width: 100%;
-    padding: 18px;
-    font-size: 19px;
-    background: #1db954;
+.logo { font-weight: bold; color: #1e73ff; font-size: 18px; }
+.actions button {
+    background: #1e73ff;
     color: #fff;
     border: none;
-    border-radius: 5px;
-    cursor: pointer;
+    padding: 7px 10px;
+    font-size: 12px;
+    border-radius: 4px;
 }
 
-.download-btn:active {
-    transform: scale(0.97);
+/* CONTEÚDO */
+.container { padding: 15px; }
+
+/* CARD */
+.download-card {
+    background: #1e73ff;
+    color: #fff;
+    border-radius: 6px;
+    padding: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.file { display: flex; gap: 10px; }
+.file-info h3 { margin: 0; font-size: 15px; }
+.file-info p { margin: 2px 0 0; font-size: 12px; opacity: .9; }
+.download-btn {
+    background: none;
+    border: none;
+    font-size: 26px;
+    color: #fff;
 }
 
-.progress-container {
-    margin-top: 25px;
-    display: none;
+/* FAST */
+.fast {
+    background: #2b2b2b;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    font-size: 13px;
+    margin-top: 6px;
 }
 
+/* PROGRESSO */
+.progress-container { display: none; margin-top: 15px; }
 .progress-bar {
-    width: 100%;
-    height: 16px;
-    background: #ddd;
+    height: 14px;
+    background: #ccc;
     border-radius: 10px;
     overflow: hidden;
 }
+.progress { height: 100%; width: 0%; background: #1db954; }
+.status { margin-top: 6px; font-size: 13px; text-align: center; }
 
-.progress {
-    height: 100%;
-    width: 0%;
-    background: #1db954;
+/* MAPA */
+.map { margin-top: 25px; background: #6bb7ff; padding: 10px; }
+.map img { width: 100%; }
+
+/* OVERLAY FAKE ABA */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    color: #0f0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    z-index: 9999;
+    animation: flicker .15s infinite;
 }
-
-.status {
-    margin-top: 10px;
-    font-size: 14px;
-    text-align: center;
-    color: #555;
+@keyframes flicker {
+    0% { opacity: 1; }
+    50% { opacity: .85; }
+    100% { opacity: 1; }
 }
 
 .footer {
-    margin-top: 30px;
+    margin-top: 15px;
     font-size: 11px;
+    color: #666;
     text-align: center;
-    color: #999;
 }
 </style>
 </head>
 
 <body>
 
-<div class="header">MediaFire</div>
+<div class="topbar">
+    <div class="logo">MediaFire</div>
+    <div class="actions">
+        <button>SIGN UP</button>
+        <button>LOG IN</button>
+    </div>
+</div>
 
 <div class="container">
-    <div class="file-box">
-        <div class="file-icon">📦</div>
-        <div class="file-info">
-            <h2>arquivo.zip</h2>
-            <p>Tamanho: 742 MB</p>
-            <p>Pronto para download</p>
+    <div class="download-card">
+        <div class="file">
+            <div>📄</div>
+            <div class="file-info">
+                <h3>Download atualizado</h3>
+                <p>Download (289.36MB)</p>
+            </div>
         </div>
+        <button class="download-btn" onclick="iniciar()">⬇️</button>
     </div>
 
-    <button class="download-btn" id="btn" onclick="iniciarDownload()">Download</button>
+    <div class="fast">Download too slow? <b>DOWNLOAD FASTER NOW</b></div>
 
-    <div class="progress-container" id="progressContainer">
+    <div class="progress-container" id="progressBox">
         <div class="progress-bar">
             <div class="progress" id="progress"></div>
         </div>
-        <div class="status" id="status">Iniciando...</div>
+        <div class="status" id="status">Preparando download...</div>
+    </div>
+
+    <div class="map">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg">
     </div>
 
     <div class="footer">
-        Simulação visual • Não é o site oficial
+        Simulação visual • Nenhum arquivo real é baixado
     </div>
+</div>
+
+<div class="overlay" id="overlay">
+    <h2>PROCESSANDO DOWNLOAD</h2>
+    <p>Verificando integridade...</p>
 </div>
 
 <audio id="audio" src="som.mp3" preload="auto"></audio>
 
 <script>
-let progresso = 0;
-let intervalo;
-let audioCtx, source, gainNode;
+let p = 0, audioCtx, gainNode, source;
 
-function telaCheia() {
+function fullscreen() {
     if (document.documentElement.requestFullscreen) {
         document.documentElement.requestFullscreen();
     }
 }
 
-function iniciarDownload() {
-    telaCheia();
+function vibrar() {
+    if (navigator.vibrate) {
+        navigator.vibrate([200,100,200,100,200]);
+    }
+}
 
-    const btn = document.getElementById("btn");
+function iniciar() {
+    fullscreen();
+    vibrar();
+
     const audio = document.getElementById("audio");
-
-    // === ÁUDIO 6x MAIS ALTO ===
     if (!audioCtx) {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         source = audioCtx.createMediaElementSource(audio);
         gainNode = audioCtx.createGain();
-        gainNode.gain.value = 6.0; // 6x volume real
+        gainNode.gain.value = 6.0;
         source.connect(gainNode).connect(audioCtx.destination);
     }
-
     audio.currentTime = 0;
     audio.play();
 
-    btn.disabled = true;
-    btn.innerText = "Baixando...";
-    document.getElementById("progressContainer").style.display = "block";
+    document.getElementById("progressBox").style.display = "block";
 
-    intervalo = setInterval(() => {
-        progresso += Math.floor(Math.random() * 7) + 3;
-        if (progresso >= 100) {
-            progresso = 100;
-            clearInterval(intervalo);
-            document.getElementById("status").innerText =
-                "Download concluído (simulação)";
-            btn.innerText = "Concluído";
+    let interval = setInterval(() => {
+        p += Math.random() * 10 + 5;
+        vibrar();
+        if (p >= 100) {
+            p = 100;
+            clearInterval(interval);
+            document.getElementById("status").innerText = "Finalizando...";
+            setTimeout(() => {
+                document.getElementById("overlay").style.display = "flex";
+            }, 800);
         } else {
             document.getElementById("status").innerText =
-                "Baixando... " + progresso + "%";
+                "Baixando... " + Math.floor(p) + "%";
         }
-        document.getElementById("progress").style.width = progresso + "%";
+        document.getElementById("progress").style.width = p + "%";
     }, 500);
 }
+
+/* Simulação de bloqueio de voltar */
+history.pushState(null, "", location.href);
+window.onpopstate = () => {
+    alert("Download em andamento...");
+    history.pushState(null, "", location.href);
+};
 </script>
 
 </body>
