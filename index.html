@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>MediaFire – Download</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+<style>
+* {
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    margin: 0;
+    background: #f2f4f7;
+    color: #333;
+}
+
+.header {
+    background: #ffffff;
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+    font-size: 22px;
+    font-weight: bold;
+    color: #0070f3;
+    text-align: center;
+}
+
+.container {
+    margin: 20px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 6px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.file-box {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.file-icon {
+    font-size: 48px;
+}
+
+.file-info h2 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.file-info p {
+    margin: 4px 0;
+    font-size: 13px;
+    color: #666;
+}
+
+.download-btn {
+    margin-top: 25px;
+    width: 100%;
+    padding: 18px;
+    font-size: 19px;
+    background: #1db954;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.download-btn:active {
+    transform: scale(0.97);
+}
+
+.progress-container {
+    margin-top: 25px;
+    display: none;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 16px;
+    background: #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress {
+    height: 100%;
+    width: 0%;
+    background: #1db954;
+}
+
+.status {
+    margin-top: 10px;
+    font-size: 14px;
+    text-align: center;
+    color: #555;
+}
+
+.footer {
+    margin-top: 30px;
+    font-size: 11px;
+    text-align: center;
+    color: #999;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">MediaFire</div>
+
+<div class="container">
+    <div class="file-box">
+        <div class="file-icon">📦</div>
+        <div class="file-info">
+            <h2>arquivo.zip</h2>
+            <p>Tamanho: 742 MB</p>
+            <p>Pronto para download</p>
+        </div>
+    </div>
+
+    <button class="download-btn" id="btn" onclick="iniciarDownload()">Download</button>
+
+    <div class="progress-container" id="progressContainer">
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+        <div class="status" id="status">Iniciando...</div>
+    </div>
+
+    <div class="footer">
+        Simulação visual • Não é o site oficial
+    </div>
+</div>
+
+<audio id="audio" src="som.mp3" preload="auto"></audio>
+
+<script>
+let progresso = 0;
+let intervalo;
+let audioCtx, source, gainNode;
+
+function telaCheia() {
+    if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen();
+    }
+}
+
+function iniciarDownload() {
+    telaCheia();
+
+    const btn = document.getElementById("btn");
+    const audio = document.getElementById("audio");
+
+    // === ÁUDIO 6x MAIS ALTO ===
+    if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        source = audioCtx.createMediaElementSource(audio);
+        gainNode = audioCtx.createGain();
+        gainNode.gain.value = 6.0; // 6x volume real
+        source.connect(gainNode).connect(audioCtx.destination);
+    }
+
+    audio.currentTime = 0;
+    audio.play();
+
+    btn.disabled = true;
+    btn.innerText = "Baixando...";
+    document.getElementById("progressContainer").style.display = "block";
+
+    intervalo = setInterval(() => {
+        progresso += Math.floor(Math.random() * 7) + 3;
+        if (progresso >= 100) {
+            progresso = 100;
+            clearInterval(intervalo);
+            document.getElementById("status").innerText =
+                "Download concluído (simulação)";
+            btn.innerText = "Concluído";
+        } else {
+            document.getElementById("status").innerText =
+                "Baixando... " + progresso + "%";
+        }
+        document.getElementById("progress").style.width = progresso + "%";
+    }, 500);
+}
+</script>
+
+</body>
+</html>
